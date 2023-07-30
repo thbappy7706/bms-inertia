@@ -1,591 +1,341 @@
 <script setup>
-import NavLink from "@/Components/NavLink.vue";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
-import { Icon } from "@iconify/vue";
-import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
+import { Link } from "@inertiajs/inertia-vue3";
 
-const showingUserDropdown = ref(false);
-
-const inventory_management = [
-    {
-        name: "Suppliers",
-        description: "Manage suppliers and vendor information",
-        href: route("suppliers"),
-        icon: "fluent:vehicle-truck-profile-24-regular",
-    },
-    {
-        name: "Consigned Inventory",
-        description: "Track and manage inventory provided by consignment",
-        href: route("consigned-inventory"),
-        icon: "fluent:box-multiple-24-regular",
-    },
-    {
-        name: "Expired Items",
-        description: "View and handle expired or expiring items",
-        href: route("expired-items"),
-        icon: "fluent:timer-24-regular",
-    },
-    {
-        name: "Products",
-        description: "Manage your product catalog",
-        href: route("products"),
-        icon: "fluent:box-24-regular",
-    },
-];
-
-const sales_and_orders = [
-    {
-        name: "Sales",
-        description: "Track and manage sales activities",
-        href: route("sales"),
-        icon: "fluent:arrow-trending-lines-24-regular",
-    },
-    {
-        name: "Orders",
-        description: "Manage orders and fulfillment",
-        href: route("orders"),
-        icon: "fluent:clipboard-24-regular",
-    },
-];
+const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
-    <div class="custom-bg min-h-screen">
-        <div class="pb-16">
-            <nav
-                class="border-b border-indigo-300 border-opacity-25 bg-transparent lg:border-none"
-            >
-                <div class="mx-auto max-w-6xl px-2 sm:px-4 lg:px-8">
-                    <div
-                        class="relative flex h-16 items-center justify-between lg:border-b lg:border-white lg:border-opacity-25"
-                    >
-                        <div class="flex items-center px-2 lg:px-0">
-                            <div class="flex-shrink-0">
-                             <h1 style="font-family: Impact; font-size: 30px;" class="text-lg font-large text-lime-500">BMS</h1>
-                            </div>
-                            <div class="hidden lg:ml-10 lg:block">
-                                <div class="flex space-x-4">
-                                    <NavLink
-                                        :href="route('dashboard')"
-                                        :active="route().current('dashboard')"
-                                    >
-                                        Dashboard
-                                    </NavLink>
-
-                                    <Popover v-slot="{ open }" class="relative">
-                                        <PopoverButton
-                                            :class="{
-                                                'bg-white px-3 py-2 text-sm font-medium text-primary':
-                                                    open ||
-                                                    route().current(
-                                                        'suppliers'
-                                                    ) ||
-                                                    route().current(
-                                                        'products'
-                                                    ) ||
-                                                    route().current(
-                                                        'consigned-inventory'
-                                                    ) ||
-                                                    route().current(
-                                                        'expired-items'
-                                                    ),
-                                                'text-white text-opacity-90':
-                                                    !open &&
-                                                    !route().current(
-                                                        'suppliers'
-                                                    ) &&
-                                                    !route().current(
-                                                        'products'
-                                                    ) &&
-                                                    !route().current(
-                                                        'consigned-inventory'
-                                                    ) &&
-                                                    !route().current(
-                                                        'expired-items'
-                                                    ),
-                                            }"
-                                            class="group inline-flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-white hover:text-primary"
-                                        >
-                                            <span>Inventory Management</span>
-                                            <Icon
-                                                :class="
-                                                    open
-                                                        ? ''
-                                                        : 'text-opacity-70'
-                                                "
-                                                icon="fluent:chevron-down-24-regular"
-                                                class="ml-2 h-5 w-5"
-                                            />
-                                        </PopoverButton>
-
-                                        <transition
-                                            enter-active-class="transition duration-200 ease-out"
-                                            enter-from-class="translate-y-1 opacity-0"
-                                            enter-to-class="translate-y-0 opacity-100"
-                                            leave-active-class="transition duration-150 ease-in"
-                                            leave-from-class="translate-y-0 opacity-100"
-                                            leave-to-class="translate-y-1 opacity-0"
-                                        >
-                                            <PopoverPanel
-                                                class="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-sm"
-                                            >
-                                                <div
-                                                    class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5"
-                                                >
-                                                    <div
-                                                        class="relative grid gap-8 bg-white p-7 lg:grid-cols-1"
-                                                    >
-                                                        <Link
-                                                            v-for="item in inventory_management"
-                                                            :key="item.name"
-                                                            :href="item.href"
-                                                            class="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-primary/10"
-                                                        >
-                                                            <div
-                                                                class="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12"
-                                                            >
-                                                                <div
-                                                                    class="rounded-lg bg-primary/10 p-2"
-                                                                >
-                                                                    <Icon
-                                                                        :icon="
-                                                                            item.icon
-                                                                        "
-                                                                        class="h-8 w-8 text-primary"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div class="ml-4">
-                                                                <p
-                                                                    class="text-sm font-medium text-gray-900"
-                                                                >
-                                                                    {{
-                                                                        item.name
-                                                                    }}
-                                                                </p>
-                                                                <p
-                                                                    class="text-sm text-gray-500"
-                                                                >
-                                                                    {{
-                                                                        item.description
-                                                                    }}
-                                                                </p>
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </PopoverPanel>
-                                        </transition>
-                                    </Popover>
-
-                                    <Popover v-slot="{ open }" class="relative">
-                                        <PopoverButton
-                                            :class="{
-                                                'bg-white px-3 py-2 text-sm font-medium text-primary':
-                                                    open ||
-                                                    route().current('sales') ||
-                                                    route().current('orders'),
-                                                'text-white text-opacity-90':
-                                                    !open &&
-                                                    !route().current('sales') &&
-                                                    !route().current('orders'),
-                                            }"
-                                            class="group inline-flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-white hover:text-primary"
-                                        >
-                                            <span> Sales & Orders</span>
-                                            <Icon
-                                                :class="
-                                                    open
-                                                        ? ''
-                                                        : 'text-opacity-70'
-                                                "
-                                                icon="fluent:chevron-down-24-regular"
-                                                class="ml-2 h-5 w-5"
-                                            />
-                                        </PopoverButton>
-
-                                        <transition
-                                            enter-active-class="transition duration-200 ease-out"
-                                            enter-from-class="translate-y-1 opacity-0"
-                                            enter-to-class="translate-y-0 opacity-100"
-                                            leave-active-class="transition duration-150 ease-in"
-                                            leave-from-class="translate-y-0 opacity-100"
-                                            leave-to-class="translate-y-1 opacity-0"
-                                        >
-                                            <PopoverPanel
-                                                class="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-sm"
-                                            >
-                                                <div
-                                                    class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5"
-                                                >
-                                                    <div
-                                                        class="relative grid gap-8 bg-white p-7 lg:grid-cols-1"
-                                                    >
-                                                        <Link
-                                                            v-for="item in sales_and_orders"
-                                                            :key="item.name"
-                                                            :href="item.href"
-                                                            class="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-primary/10"
-                                                        >
-                                                            <div
-                                                                class="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12"
-                                                            >
-                                                                <div
-                                                                    class="rounded-lg bg-primary/10 p-2"
-                                                                >
-                                                                    <Icon
-                                                                        :icon="
-                                                                            item.icon
-                                                                        "
-                                                                        class="h-8 w-8 text-primary"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div class="ml-4">
-                                                                <p
-                                                                    class="text-sm font-medium text-gray-900"
-                                                                >
-                                                                    {{
-                                                                        item.name
-                                                                    }}
-                                                                </p>
-                                                                <p
-                                                                    class="text-sm text-gray-500"
-                                                                >
-                                                                    {{
-                                                                        item.description
-                                                                    }}
-                                                                </p>
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </PopoverPanel>
-                                        </transition>
-                                    </Popover>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end"
+    <!-- component -->
+    <!-- This is an example component -->
+    <div>
+        <!-- Nav Bar -->
+        <nav class="bg-white border-b border-gray-200 fixed z-30 w-full">
+            <div class="px-3 py-3 lg:px-5 lg:pl-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <button
+                            id="toggleSidebarMobile"
+                            aria-expanded="true"
+                            aria-controls="sidebar"
+                            class="lg:hidden mr-2 text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+                            @click="
+                                showingNavigationDropdown =
+                                    !showingNavigationDropdown
+                            "
                         >
-                            <div class="w-full max-w-lg lg:max-w-xs">
-                                <label for="search" class="sr-only"
-                                    >Search</label
-                                >
-                                <div
-                                    class="relative text-gray-400 focus-within:text-primary"
-                                >
-                                    <div
-                                        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                                    >
-                                        <Icon
-                                            icon="fluent:search-24-regular"
-                                            class="h-5 w-5 text-gray-600"
-                                        />
-                                    </div>
-                                    <input
-                                        id="search"
-                                        class="block w-full rounded-md border border-transparent bg-white py-2 pl-10 pr-3 leading-5 text-gray-900 placeholder-gray-500 focus:border-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary sm:text-sm"
-                                        placeholder="Search"
-                                        type="search"
-                                        name="search"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex lg:hidden">
-                            <!-- Mobile menu button -->
-                            <button
-                                type="button"
-                                class="inline-flex items-center justify-center rounded-md bg-white p-2 text-indigo-200 hover:bg-indigo-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-white"
-                                aria-controls="mobile-menu"
-                                aria-expanded="false"
+                            <svg
+                                id="toggleSidebarMobileHamburger"
+                                class="w-6 h-6"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
                             >
-                                <span class="sr-only">Open main menu</span>
-                                <!--
-                Heroicon name: outline/menu
-
-                Menu open: "hidden", Menu closed: "block"
-              -->
-                                <svg
-                                    class="block h-6 w-6"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                            <svg
+                                id="toggleSidebarMobileClose"
+                                class="w-6 h-6 hidden"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                        </button>
+                        <Link
+                            :href="route('dashboard')"
+                            class="text-xl font-bold flex items-center lg:ml-2.5"
+                        >
+                            <span
+                                class="self-center whitespace-nowrap text-3xl font-bold font-serif text-gray-800"
+                                >LMS</span
+                            >
+                        </Link>
+                        <form
+                            action="#"
+                            method="GET"
+                            class="hidden lg:block lg:pl-32"
+                        >
+                            <label for="topbar-search" class="sr-only"
+                                >Search</label
+                            >
+                            <div class="mt-1 relative lg:w-64">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                </svg>
-                                <!--
-                Heroicon name: outline/x
-
-                Menu open: "block", Menu closed: "hidden"
-              -->
-                                <svg
-                                    class="hidden h-6 w-6"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="hidden lg:ml-4 lg:block">
-                            <div class="flex items-center">
-                                <button
-                                    type="button"
-                                    class="flex-shrink-0 rounded-full bg-white p-1 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
-                                >
-                                    <span class="sr-only"
-                                        >View notifications</span
+                                    <svg
+                                        class="w-5 h-5 text-gray-500"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg"
                                     >
-                                    <Icon
-                                        icon="fluent:alert-24-regular"
-                                        class="h-6 w-6 text-primary/70 hover:text-primary"
-                                    />
-                                </button>
-
-                                <!-- Profile dropdown -->
-                                <div class="relative ml-3 flex-shrink-0">
-                                    <div>
-                                        <button
-                                            @click="
-                                                showingUserDropdown =
-                                                    !showingUserDropdown
-                                            "
-                                            type="button"
-                                            class="flex rounded-full bg-white text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
-                                        >
-                                            <span class="sr-only"
-                                                >Open user menu</span
-                                            >
-                                            <img
-                                                class="h-8 w-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                alt=""
-                                            />
-                                        </button>
-                                    </div>
-                                    <div
-                                        :class="{
-                                            hidden: !showingUserDropdown,
-                                        }"
-                                        @click.outside="
-                                            showingUserDropdown = false
-                                        "
-                                        class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                    >
-                                        <div
-                                            class="px-4 py-2 text-sm font-normal"
-                                        >
-                                            <div
-                                                class="flex flex-col space-y-1"
-                                            >
-                                                <p
-                                                    class="text-sm font-medium leading-none text-gray-700"
-                                                >
-                                                    Aljon Lerios
-                                                </p>
-                                                <p
-                                                    class="text-xs leading-none text-gray-500"
-                                                >
-                                                    manager
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div
-                                            role="separator"
-                                            aria-orientation="horizontal"
-                                            class="my-1 h-px bg-gray-200"
-                                        ></div>
-
-                                        <!-- Active: "bg-gray-100", Not Active: "" -->
-                                        <a
-                                            href="#"
-                                            class="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            role="menuitem"
-                                            tabindex="-1"
-                                            id="user-menu-item-0"
-                                        >
-                                            Your Profile
-                                        </a>
-
-                                        <a
-                                            href="#"
-                                            class="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            role="menuitem"
-                                            tabindex="-1"
-                                            id="user-menu-item-1"
-                                        >
-                                            Settings
-                                        </a>
-
-                                        <Link
-                                            :href="route('logout')"
-                                            method="post"
-                                            class="flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            role="menuitem"
-                                            tabindex="-1"
-                                            id="user-menu-item-2"
-                                            as="button"
-                                        >
-                                            Sign out
-                                        </Link>
-                                    </div>
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                            clip-rule="evenodd"
+                                        ></path>
+                                    </svg>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile menu, show/hide based on menu state. -->
-                <div class="lg:hidden" id="mobile-menu">
-                    <div class="space-y-1 px-2 pb-3 pt-2">
-                        <!-- Current: "bg-primary text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
-                        <a
-                            href="#"
-                            class="block rounded-md bg-primary px-3 py-2 text-base font-medium text-white"
-                            aria-current="page"
-                        >
-                            Dashboard
-                        </a>
-
-                        <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                        >
-                            Team
-                        </a>
-
-                        <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                        >
-                            Projects
-                        </a>
-
-                        <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                        >
-                            Calendar
-                        </a>
-
-                        <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                        >
-                            Reports
-                        </a>
-                    </div>
-                    <div class="border-t border-primary pb-3 pt-4">
-                        <div class="flex items-center px-5">
-                            <div class="flex-shrink-0">
-                                <img
-                                    class="h-10 w-10 rounded-full"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt=""
+                                <input
+                                    type="text"
+                                    name="email"
+                                    id="topbar-search"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full pl-10 p-2.5"
+                                    placeholder="Search"
                                 />
                             </div>
-                            <div class="ml-3">
-                                <div class="text-base font-medium text-white">
-                                    Tom Cook
-                                </div>
-                                <div
-                                    class="text-sm font-medium text-indigo-300"
-                                >
-                                    tom@example.com
-                                </div>
-                            </div>
-                            <button
-                                type="button"
-                                class="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-white"
+                        </form>
+                    </div>
+                    <div class="flex items-center">
+                        <button
+                            id="toggleSidebarMobileSearch"
+                            type="button"
+                            class="lg:hidden text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg"
+                            @click="
+                                showingNavigationDropdown =
+                                    !showingNavigationDropdown
+                            "
+                        >
+                            <span class="sr-only">Search</span>
+                            <svg
+                                class="w-6 h-6"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
                             >
-                                <span class="sr-only">View notifications</span>
-                                <!-- Heroicon name: outline/bell -->
-                                <svg
-                                    class="h-6 w-6"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="mt-3 space-y-1 px-2">
-                            <a
-                                href="#"
-                                class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                            >
-                                Your Profile
-                            </a>
-
-                            <a
-                                href="#"
-                                class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                            >
-                                Settings
-                            </a>
-
-                            <Link
-                                :href="route('logout')"
-                                class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
-                                as="button"
-                            >
-                                Sign out
-                            </Link>
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                        </button>
+                        <div
+                            class="flex items-center md:order-2 cursor-pointer"
+                            @click="
+                                showingNavigationDropdown =
+                                    !showingNavigationDropdown
+                            "
+                        >
+                            <img
+                                class="w-8 h-8 rounded-full"
+                                src="../../assets/user.png"
+                                alt="user photo"
+                            />
+                            <p class="text-gray-800 font-semibold px-2">
+                                {{ $page.props.auth.user.name }}
+                            </p>
                         </div>
                     </div>
                 </div>
-            </nav>
-            <header class="py-10">
-                <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                    <slot name="header"></slot>
-                </div>
-            </header>
-        </div>
-
-        <main class="-mt-16">
-            <div class="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
-                <!-- content -->
-                <slot />
             </div>
-        </main>
+        </nav>
+
+        <!-- NavBar -->
+        <div class="flex overflow-hidden bg-white pt-16">
+            <!-- SideBar -->
+            <aside
+                id="sidebar"
+                class="fixed z-20 h-full top-0 left-0 pt-16 flex lg:flex flex-shrink-0 flex-col w-64 transition-width duration-75"
+                aria-label="Sidebar"
+                :class="{ hidden: !showingNavigationDropdown }"
+            >
+                <div
+                    class="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0"
+                >
+                    <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                        <div class="flex-1 px-3 bg-white divide-y space-y-1">
+                            <ul class="space-y-2 pb-2">
+                                <li>
+                                    <form
+                                        action="#"
+                                        method="GET"
+                                        class="lg:hidden"
+                                    >
+                                        <label
+                                            for="mobile-search"
+                                            class="sr-only"
+                                            >Search</label
+                                        >
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                                            >
+                                                <svg
+                                                    class="w-5 h-5 text-gray-500"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                                                    ></path>
+                                                </svg>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                name="email"
+                                                id="mobile-search"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-600 block w-full pl-10 p-2.5"
+                                                placeholder="Search"
+                                            />
+                                        </div>
+                                    </form>
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('dashboard')"
+                                        class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                                    >
+                                        <svg
+                                            class="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                                            ></path>
+                                            <path
+                                                d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"
+                                            ></path>
+                                        </svg>
+                                        <span class="ml-3">Dashboard</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('category.index')"
+                                        class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                                    >
+                                        <svg
+                                            class="w-6 h-6"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"
+                                            ></path>
+                                        </svg>
+                                        <span class="ml-3">Category</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('author.index')"
+                                        class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                                    >
+                                        <svg
+                                            class="w-6 h-6"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
+                                            ></path>
+                                        </svg>
+                                        <span class="ml-3">Author</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('location.index')"
+                                        class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                                    >
+                                        <svg
+                                            class="w-6 h-6"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 8v7a1 1 0 100 2h14a1 1 0 100-2V8a1 1 0 00.496-1.868l-7-4zM6 9a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1zm3 1a1 1 0 012 0v3a1 1 0 11-2 0v-3zm5-1a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1z"
+                                                clip-rule="evenodd"
+                                            ></path>
+                                        </svg>
+                                        <span class="ml-3">Location Rack</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('book.index')"
+                                        class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                                    >
+                                        <svg
+                                            class="w-6 h-6"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                                            ></path>
+                                        </svg>
+                                        <span class="ml-3">Book</span>
+                                    </Link>
+                                </li>
+                            </ul>
+                            <div class="space-y-2 pt-2">
+                                <a
+                                    href="#"
+                                    class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
+                                >
+                                    <svg
+                                        class="w-6 h-6"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                                            clip-rule="evenodd"
+                                        ></path>
+                                    </svg>
+                                    <Link
+                                        :href="route('logout')"
+                                        method="post"
+                                        as="button"
+                                        class="ml-4"
+                                        >Logout</Link
+                                    >
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <!-- Sidebar -->
+            <div
+                class="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"
+                id="sidebarBackdrop"
+            ></div>
+            <div
+                id="main-content"
+                class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64"
+            >
+                <main>
+                    <slot />
+                </main>
+                <p class="text-center text-sm text-gray-500 my-10">
+                    &copy; 2022
+                    <a href="#" class="hover:underline" target="_blank"
+                        >Library Management System</a
+                    >. All rights reserved.
+                </p>
+            </div>
+        </div>
     </div>
 </template>
-
-<style>
-.custom-bg {
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0.2) 100%
-        ),
-        url(images/bg.jpg);
-    background-size: cover;
-}
-</style>

@@ -1,16 +1,12 @@
 <?php
 
-use Inertia\Inertia;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LocationRackController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SaleController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ExpiredController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\ConsignedProductController;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,48 +19,23 @@ use App\Http\Controllers\ConsignedProductController;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth','verified']], function(){
+    Route::get('/dashboard', function(){
         return Inertia::render('Dashboard');
     })->name('dashboard');
-
-    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers');
-    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
-    Route::patch('/suppliers/{supp_id}', [SupplierController::class, 'update'])->name('suppliers.update');
-    Route::delete('/suppliers/{supp_id}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
-
-    Route::get('/products', [ProductController::class, 'index'])->name('products');
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::patch('/products/{prod_id}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/{prod_id}', [ProductController::class, 'destroy'])->name('products.destroy');
-
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-    Route::patch('/orders/{order_id}', [OrderController::class, 'update'])->name('orders.update');
-    Route::delete('/orders/{order_id}', [OrderController::class, 'destroy'])->name('orders.destroy');
-
-    Route::get('/consigned-inventory', [ConsignedProductController::class, 'index'])->name('consigned-inventory');
-    Route::post('/consigned-inventory', [ConsignedProductController::class, 'store'])->name('consigned-inventory.store');
-    Route::patch('/consigned-inventory/{item_id}', [ConsignedProductController::class, 'update'])->name('consigned-inventory.update');
-    Route::delete('/consigned-inventory/{item_id}', [ConsignedProductController::class, 'destroy'])->name('consigned-inventory.destroy');
-
-    Route::get('/expired-items', [ExpiredController::class, 'index'])->name('expired-items');
-
-    Route::get('/sales', [SaleController::class, 'index'])->name('sales');
+    Route::resource('category',CategoryController::class);
+    Route::resource('author',AuthorController::class);
+    Route::resource('location',LocationRackController::class);
+    Route::resource('book', BookController::class);
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice');
-
-    Route::post('/invoice', [InvoiceController::class, 'store'])->name('sales.store');
-
-    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
